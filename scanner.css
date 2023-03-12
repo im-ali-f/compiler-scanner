@@ -1,0 +1,96 @@
+*{ 
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    top: 0;
+    outline: none;
+    text-decoration: none;
+    border: none;
+}
+:root{
+    --bodyColor : #ecf0f1;
+    --fontColor:rgb(80, 161, 128);
+    --lightFontColor:#ade1d1;
+    --darkGray: #6b706f;
+    --darkGrayO: #909796a8;
+    --lightGray: #9ba6a5;
+    --lightGrayO: #d9e1e197;
+    --lightGrayHover:#c1d7d7a0;
+    --darkGreen: #aeccc6;
+    --darkGreenO: #aeccc6b2;
+    --lightGreen: #bbe9db;
+    --control:#71cfbe;
+}
+html { font-size: 62.5%; } 
+body{ background-color: var(--bodyColor); }
+.scannerInput{
+    width: 80%;
+    height: 10vh;
+    background:var(--darkGrayO);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6.7px);
+    -webkit-backdrop-filter: blur(6.7px);
+    border: 1px solid rgba(65, 29, 29, 0.17);
+    margin: auto;
+    margin-top: 2vh;
+    color: var(--lightFontColor);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+form{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.font{
+    font-family: sans-serif;
+    letter-spacing: 1px;
+    word-spacing: 2px;
+    font-weight: 888;
+    text-transform: uppercase;
+}
+#fileFromHtml{
+    font-size: 20px;
+    margin-left: 5vh;
+    cursor: pointer;
+}
+.scannerOutput{
+    width: 80%;
+    padding: 5vh;
+    color: var(--fontColor);
+    font-size: 15px;
+    background:var(--lightGrayO);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6.7px);
+    -webkit-backdrop-filter: blur(6.7px);
+    border: 1px solid rgba(65, 29, 29, 0.17);
+    margin: auto;
+    margin-top: 2vh; 
+    text-transform: initial;
+}
+.scanBTN{
+    background-color: var(--control);
+    padding: 1vh;
+    border-radius: 8px;
+    margin-right: 5vh;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 20%;
+    height: 90%;
+}
+.scanBTN:hover{
+    background-color: var(--darkGreen);
+    transition: all 0.3s ease-in-out;
+    color: greenyellow;
+}
+.diffFont{
+    color: rgb(110, 70, 70);
+    font-size: 30px;
+}
