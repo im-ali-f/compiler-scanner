@@ -63,8 +63,6 @@ if (isset($_FILES["file"])) {
                         $tempToken .= $word[$strCounter];
                     }
                 }
-
-
                 $strCounter += 1;
             }
             if ($tempToken != "" && $tempToken != " " && ord($tempToken) != 13 && ord($tempToken) != 9) {
@@ -74,14 +72,13 @@ if (isset($_FILES["file"])) {
     }
     $lastTokenList = [];
     foreach ($tokenList as $token) {
-        if ($tempToken != "" && $tempToken != " " && ord($tempToken) != 13 && ord($tempToken) != 9) {
+        if ($token != "" && $token != " " && ord($token) != 13 && ord($token) != 9) {
             $lastTokenList[] = $token;
         }
     }
 }
 
 ?>
-
 <div class="scannerOutput font">
     <div class="diffFont">Token List</div>
     <hr>
