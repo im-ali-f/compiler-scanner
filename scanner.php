@@ -77,46 +77,68 @@ if (isset($_FILES["file"])) {
         }
     }
 
-
-    $singleTokens=["\"","'","(",")","{","}",",","`","[","]","$"];
-    $newLastToken=[];
-    $count=1;
-    $replace="";
-    $wholeTokens=[];
-    $foundSingle=0;
-    $foundNotSingle=0;
+    //fix single tokens
+    $singleTokens = ["\"", "'", "(", ")", "{", "}", ",", "`", "[", "]", "$"];
+    $newLastToken = [];
+    $wholeTokens = [];
+    $foundSingle = 0;
+    $foundNotSingle = 0;
     foreach ($lastTokenList as $token) {
-        $newSingleToken="";
-        $newNotSingleToken="";
+        $newSingleToken = "";
+        $newNotSingleToken = "";
         foreach (mb_str_split($token) as $word) {
-            if(in_array($word, $singleTokens)){
-                $newSingleToken=$word;
-                $foundSingle=1;
+            if (in_array($word, $singleTokens)) {
+                $newSingleToken = $word;
+                $foundSingle = 1;
             }
-            if($foundSingle ==0){
-                $foundNotSingle=0;
-                $newNotSingleToken.=$word;
-            }
-            else{
-                $wholeTokens[]=$newSingleToken;
-                $foundSingle=0;
-                $newSingleToken="";
-
+            if ($foundSingle == 0) {
+                $foundNotSingle = 0;
+                $newNotSingleToken .= $word;
+            } else {
                 if ($newNotSingleToken != "" && $newNotSingleToken != " " && ord($newNotSingleToken) != 13 && ord($newNotSingleToken) != 9) {
-                    $wholeTokens[]=$newNotSingleToken;
+                    $wholeTokens[] = $newNotSingleToken;
                 }
-                $newNotSingleToken="";
-                $foundNotSingle=1;
+                $newNotSingleToken = "";
+                $foundNotSingle = 1;
+
+                $wholeTokens[] = $newSingleToken;
+                $foundSingle = 0;
+                $newSingleToken = "";
             }
         }
-    if($foundNotSingle ==0){
-        if ($newNotSingleToken != "" && $newNotSingleToken != " " && ord($newNotSingleToken) != 13 && ord($newNotSingleToken) != 9) {
-            $wholeTokens[]=$newNotSingleToken;
+        if ($foundNotSingle == 0) {
+            if ($newNotSingleToken != "" && $newNotSingleToken != " " && ord($newNotSingleToken) != 13 && ord($newNotSingleToken) != 9) {
+                $wholeTokens[] = $newNotSingleToken;
+            }
         }
-    }          
     }
 
-    
+    //fix separate operators from ...
+    $lastWholeToken=[];
+    $newOp="";
+    $count = 1;
+    $replace = "";
+    foreach ($wholeTokens as $token) {
+        $opListed=0;
+        $regex = '/[A-Za-z0-9]*\w+/i';
+        $tempToken=$token;
+        $newOp="";
+            foreach (mb_str_split($token) as $word) {
+                if(!preg_match($regex, $word)){
+                    $newOp.=$word;
+                    str_replace($word,$replace,$tempToken,$count);
+                }
+                else if(preg_match($regex, $word)){
+                        $lastWholeToken[]=$newOp;
+                        $lastWholeToken[]=$tempToken;
+                        $opListed=1;
+                        break;    
+                }
+            }
+        if($opListed == 0){
+            $lastWholeToken[]=$newOp;
+        }    
+    }
 }
 
 
@@ -125,7 +147,7 @@ if (isset($_FILES["file"])) {
     <div class="diffFont">Token List</div>
     <hr>
     <?php
-    foreach ($wholeTokens as $token) {
+    foreach ($lastWholeToken as $token) {
         echo "<br>" . $token;
     }
     ?>
