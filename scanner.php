@@ -11,6 +11,7 @@
 
 <body>
     <div class="wholeScanner">
+        <p class="text">Compiler Scanner <br> فایل را آپلود و اسکن کنید </p>
         <div class="scannerInput">
             <form action="scanner.php" method="post" enctype="multipart/form-data">
                 <input type="file" name="file" id="fileFromHtml" class="font">
@@ -31,7 +32,7 @@ if (isset($_FILES["file"])) {
 
     $regex = '/[A-Za-z0-9]*\w+/i';
     $tokenList = [];
-    $op = [";", ">", ")"];
+    $op = [";",")"];
     foreach ($wordBySpace as $wordArray) {
         foreach ($wordArray as $word) {
             $strCounter = 0;
@@ -147,7 +148,6 @@ if (isset($_FILES["file"])) {
         }
     }
 }
-
 
 ?>
 <div class="scannerOutput font">
