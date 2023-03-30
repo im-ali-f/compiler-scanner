@@ -114,30 +114,37 @@ if (isset($_FILES["file"])) {
     }
 
     //fix separate operators from ...
-    $lastWholeToken=[];
-    $newOp="";
+    $tempLastWholeToken = [];
+    $newOp = "";
     $count = 1;
     $replace = "";
     foreach ($wholeTokens as $token) {
-        $opListed=0;
+        $opListed = 0;
         $regex = '/[A-Za-z0-9]*\w+/i';
-        $tempToken=$token;
-        $newOp="";
-            foreach (mb_str_split($token) as $word) {
-                if(!preg_match($regex, $word)){
-                    $newOp.=$word;
-                    str_replace($word,$replace,$tempToken,$count);
-                }
-                else if(preg_match($regex, $word)){
-                        $lastWholeToken[]=$newOp;
-                        $lastWholeToken[]=$tempToken;
-                        $opListed=1;
-                        break;    
-                }
+        $tempToken = $token;
+        $newOp = "";
+        foreach (mb_str_split($token) as $word) {
+            if (!preg_match($regex, $word)) {
+                $newOp .= $word;
+                str_replace($word, $replace, $tempToken, $count);
+            } else if (preg_match($regex, $word)) {
+                $tempLastWholeToken[] = $newOp;
+                $tempLastWholeToken[] = $tempToken;
+                $opListed = 1;
+                break;
             }
-        if($opListed == 0){
-            $lastWholeToken[]=$newOp;
-        }    
+        }
+        if ($opListed == 0) {
+            $tempLastWholeToken[] = $newOp;
+        }
+    }
+
+    $lastWholeTokens = [];
+    //catch White spaces 
+    foreach ($tempLastWholeToken as $token) {
+        if ($token != "" && $token != " " && ord($token) != 13 && ord($token) != 9) {
+            $lastWholeTokens[] = $token;
+        }
     }
 }
 
@@ -147,7 +154,7 @@ if (isset($_FILES["file"])) {
     <div class="diffFont">Token List</div>
     <hr>
     <?php
-    foreach ($lastWholeToken as $token) {
+    foreach ($lastWholeTokens as $token) {
         echo "<br>" . $token;
     }
     ?>
