@@ -29,7 +29,7 @@ if (isset($_FILES["file"])) {
         $wordBySpace[] = explode(" ", $line);
     }
 
-
+    $regex = '/[A-Za-z0-9]*\w+/i';
     $tokenList = [];
     $op = [";", ">", ")"];
     foreach ($wordBySpace as $wordArray) {
@@ -76,14 +76,56 @@ if (isset($_FILES["file"])) {
             $lastTokenList[] = $token;
         }
     }
+
+
+    $singleTokens=["\"","'","(",")","{","}",",","`","[","]","$"];
+    $newLastToken=[];
+    $count=1;
+    $replace="";
+    $wholeTokens=[];
+    $foundSingle=0;
+    $foundNotSingle=0;
+    foreach ($lastTokenList as $token) {
+        $newSingleToken="";
+        $newNotSingleToken="";
+        foreach (mb_str_split($token) as $word) {
+            if(in_array($word, $singleTokens)){
+                $newSingleToken=$word;
+                $foundSingle=1;
+            }
+            if($foundSingle ==0){
+                $foundNotSingle=0;
+                $newNotSingleToken.=$word;
+            }
+            else{
+                $wholeTokens[]=$newSingleToken;
+                $foundSingle=0;
+                $newSingleToken="";
+
+                if ($newNotSingleToken != "" && $newNotSingleToken != " " && ord($newNotSingleToken) != 13 && ord($newNotSingleToken) != 9) {
+                    $wholeTokens[]=$newNotSingleToken;
+                }
+                $newNotSingleToken="";
+                $foundNotSingle=1;
+            }
+        }
+    if($foundNotSingle ==0){
+        if ($newNotSingleToken != "" && $newNotSingleToken != " " && ord($newNotSingleToken) != 13 && ord($newNotSingleToken) != 9) {
+            $wholeTokens[]=$newNotSingleToken;
+        }
+    }          
+    }
+
+    
 }
+
 
 ?>
 <div class="scannerOutput font">
     <div class="diffFont">Token List</div>
     <hr>
     <?php
-    foreach ($lastTokenList as $token) {
+    foreach ($wholeTokens as $token) {
         echo "<br>" . $token;
     }
     ?>
